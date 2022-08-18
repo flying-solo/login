@@ -1,7 +1,7 @@
 function Authorised(){
     return(
         <div className="">
-            This is Authorised
+            This is Authorised 
         </div>
     );
 }

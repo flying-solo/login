@@ -1,17 +1,44 @@
 import { Link } from "react-router-dom";
 import Button from "@mui/material/Button";
+import Box from "@mui/material/Box";
 
-function Home() {
+function Home(props) {
   return (
-    <div className="">
+    <Box
+      sx={{
+        p: 2,
+        border: "1px solid grey",
+        display: "flex",
+        flexDirection: "column",
+        width: 1 / 4,
+        mx: "auto",
+        gap: 5,
+        mt: 5,
+      }}
+    >
       This is homepage.
-      <Link to="/signup" style={{ textDecoration: "none" }}>
-        <Button variant="contained">Sign Up</Button>
-      </Link>
-      <Link to="/login" style={{ textDecoration: "none" }}>
-        <Button variant="contained">Login</Button>
-      </Link>
-    </div>
+      {props.loggedin ? (
+        <p>
+          You are logged in.
+          <br />
+          <Button variant="contained" onClick={()=>{props.logOut()}}>Logout</Button>
+        </p>
+      ) : (
+        <>
+          <Link to="/signup" style={{ textDecoration: "none" }}>
+            <Button
+              variant="contained"
+              onClick={()=>{props.logIn()}}
+            >
+              Sign Up
+            </Button>
+          </Link>
+          <Link to="/login" style={{ textDecoration: "none" }}>
+            <Button variant="contained" onClick={()=>{props.logIn()}}>Login</Button>
+          </Link>
+        </>
+      )}
+    </Box>
   );
 }
 
