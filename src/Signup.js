@@ -3,15 +3,38 @@ import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import { Link } from "react-router-dom";
 import { useState } from "react";
+import { clientSchema } from "./validation/clientValidate";
+import axios from "axios";
 
 function Signup() {
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
-  const [name, setName] = useState("");
-  const [username, setUsername] = useState("");
-  const handleSubmit = (e) => {
+  const [response, setResponse] = useState("");
+  const [error, setError] = useState("");
+
+  const signupURL = process.env.SIGNUPURL;
+
+  // const [name, setName] = useState("");
+  // const [username, setUsername] = useState("");
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(password, email);
+    let signupData = {
+      // name: name,
+      // username: username,
+      "email": email,
+      "password": password
+    }
+    const isSignupValid = await clientSchema.isValid(signupData);
+    console.log(isSignupValid);
+
+    if(isSignupValid){
+      axios.post(signupURL, signupData).then((res)=>{setResponse(res.data);}).catch((err)=>{setError(err);});
+    }else{
+      console.log(isSignupValid);
+    }
+    console.log(response);
+    console.log(error);
   };
 
   return (
@@ -30,7 +53,7 @@ function Signup() {
         }}
       >
         <Box sx={{ fontSize: "h5.fontSize" }}>Signup</Box>
-        <TextField
+        {/* <TextField
           id="outlined-basic"
           label="Name"
           variant="outlined"
@@ -38,8 +61,8 @@ function Signup() {
           onChange={(e) => {
             setName(e.target.value);
           }}
-        />
-        <TextField
+        /> */}
+        {/* <TextField
           id="outlined-basic"
           label="Username"
           variant="outlined"
@@ -47,7 +70,7 @@ function Signup() {
           onChange={(e) => {
             setUsername(e.target.value);
           }}
-        />
+        /> */}
         <TextField
           id="outlined-basic"
           label="Email"
