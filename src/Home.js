@@ -21,6 +21,8 @@ function Home(props) {
         <p>
           You are logged in.
           <br />
+          <br />
+          <Link to="/profile"><Button variant="contained">Profile</Button></Link>
           <Button variant="contained" onClick={()=>{props.logOut()}}>Logout</Button>
         </p>
       ) : (

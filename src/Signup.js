@@ -4,37 +4,82 @@ import TextField from "@mui/material/TextField";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { clientSchema } from "./validation/clientValidate";
+import {useNavigate} from "react-router-dom";
 import axios from "axios";
+import { ToastContainer, toast} from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-function Signup() {
+function Signup(props) {
+  const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
-  const [response, setResponse] = useState("");
-  const [error, setError] = useState("");
+  const [load, setLoad] = useState(false);
+  const navigate = useNavigate();
 
-  const signupURL = process.env.SIGNUPURL;
+  const error = (message) => {
+    toast.error(message, {
+      position: "bottom-center",
+      autoClose: 2000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+    });
+  };
 
-  // const [name, setName] = useState("");
-  // const [username, setUsername] = useState("");
+  const success = (message) => {
+    toast.success(message, {
+      position: "bottom-center",
+      autoClose: 2000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: false,
+      draggable: true,
+      progress: undefined,
+      theme: "colored"
+      });
+  }
+
+  const signupURL = process.env.REACT_APP_SIGNUPURL;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     let signupData = {
-      // name: name,
-      // username: username,
-      "email": email,
-      "password": password
-    }
+      name: name,
+      emailId: email,
+      password: password,
+    };
+
     const isSignupValid = await clientSchema.isValid(signupData);
+
     console.log(isSignupValid);
 
-    if(isSignupValid){
-      axios.post(signupURL, signupData).then((res)=>{setResponse(res.data);}).catch((err)=>{setError(err);});
-    }else{
+    if (isSignupValid) {
       console.log(isSignupValid);
+      axios
+        .post(signupURL, signupData)
+        .then((res) => {
+          console.log(res.data);
+          success(res.data.message);
+          setLoad(false);
+          props.login();
+          setTimeout(()=>{
+            navigate("/");
+          },4000);
+        })
+        .catch((err) => {
+          // console.log(err.response.data.message);
+          console.log(err);
+          error(err.response.data.message);
+          setLoad(false);
+        });
+    } else {
+      error("Enter Valid Credentials");
+      console.log("error");
+      setLoad(false);
     }
-    console.log(response);
-    console.log(error);
   };
 
   return (
@@ -53,7 +98,7 @@ function Signup() {
         }}
       >
         <Box sx={{ fontSize: "h5.fontSize" }}>Signup</Box>
-        {/* <TextField
+        <TextField
           id="outlined-basic"
           label="Name"
           variant="outlined"
@@ -61,16 +106,8 @@ function Signup() {
           onChange={(e) => {
             setName(e.target.value);
           }}
-        /> */}
-        {/* <TextField
-          id="outlined-basic"
-          label="Username"
-          variant="outlined"
-          value={username}
-          onChange={(e) => {
-            setUsername(e.target.value);
-          }}
-        /> */}
+        />
+        
         <TextField
           id="outlined-basic"
           label="Email"
@@ -91,14 +128,25 @@ function Signup() {
             setPassword(e.target.value);
           }}
         />
-        <Button
+        {load ? (<Button
           variant="contained"
           onClick={(e) => {
             handleSubmit(e);
+            setLoad(true);
+          }}
+        >
+          Loading....
+        </Button>) : (<Button
+          variant="contained"
+          onClick={(e) => {
+            handleSubmit(e);
+            setLoad(true);
           }}
         >
           Signup
-        </Button>
+        </Button>)}
+        
+        <ToastContainer />
         <p>
           Already have an account? <Link to="/login">Login</Link>
         </p>

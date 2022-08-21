@@ -21,8 +21,8 @@ function App() {
       <Routes>
         <Route exact path='/' element={<Home loggedin={loggedin} logIn={logIn} logOut={logOut}/>} />
         <Route exact path='/login' element={<Login login={loggedin} setLoggedin={setLoggedin}/>} />
-        <Route exact path='/signup' element={<Signup login={loggedin} setLoggedin={setLoggedin}/>} />
-        <Route exact path='/profile' element={<Protected isLoggedIn={loggedin}><Authorised login={loggedin} setLoggedin={setLoggedin}/></Protected>} />
+        <Route exact path='/signup' element={<Signup login={logIn}/>} />
+        <Route exact path='/profile' element={<Protected isLoggedIn={loggedin}><Authorised/></Protected>} />
       </Routes>
     </Router>
   );
