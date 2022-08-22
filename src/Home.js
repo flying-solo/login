@@ -3,6 +3,8 @@ import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 
 function Home(props) {
+  const getToken = localStorage.getItem("token");
+
   return (
     <Box
       sx={{
@@ -17,7 +19,7 @@ function Home(props) {
       }}
     >
       This is homepage.
-      {props.loggedin ? (
+      {getToken ? (
         <p>
           You are logged in.
           <br />
@@ -28,8 +30,8 @@ function Home(props) {
           <Button
             variant="contained"
             onClick={() => {
-              props.logOut();
-              localStorage.removeItem('token');
+              localStorage.clear();
+              window.location.reload();
             }}
           >
             Logout

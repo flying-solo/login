@@ -9,7 +9,7 @@ import axios from "axios";
 import { ToastContainer, toast} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-function Signup(props) {
+function Signup() {
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
@@ -64,7 +64,6 @@ function Signup(props) {
           console.log(res.data);
           success(res.data.message);
           setLoad(false);
-          props.login();
           setTimeout(()=>{
             navigate("/");
           },4000);

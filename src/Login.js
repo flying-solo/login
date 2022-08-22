@@ -62,7 +62,6 @@ function Login(props) {
           localStorage.setItem('token', res.data.token);
           success(res.data.message);
           setLoad(false);
-          props.login();
           setTimeout(()=>{
             navigate("/");
           },4000);
