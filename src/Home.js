@@ -22,21 +22,40 @@ function Home(props) {
           You are logged in.
           <br />
           <br />
-          <Link to="/profile"><Button variant="contained">Profile</Button></Link>
-          <Button variant="contained" onClick={()=>{props.logOut()}}>Logout</Button>
+          <Link to="/profile" style={{ textDecoration: "none" }}>
+            <Button variant="contained">Profile</Button>
+          </Link>
+          <Button
+            variant="contained"
+            onClick={() => {
+              props.logOut();
+              localStorage.removeItem('token');
+            }}
+          >
+            Logout
+          </Button>
         </p>
       ) : (
         <>
           <Link to="/signup" style={{ textDecoration: "none" }}>
             <Button
               variant="contained"
-              onClick={()=>{props.logIn()}}
+              onClick={() => {
+                props.logIn();
+              }}
             >
               Sign Up
             </Button>
           </Link>
           <Link to="/login" style={{ textDecoration: "none" }}>
-            <Button variant="contained" onClick={()=>{props.logIn()}}>Login</Button>
+            <Button
+              variant="contained"
+              onClick={() => {
+                props.logIn();
+              }}
+            >
+              Login
+            </Button>
           </Link>
         </>
       )}

@@ -9,6 +9,7 @@ import Protected from './Protected';
 
 function App() {
   const [loggedin, setLoggedin] = useState(false);
+  
   const logIn = () => {
     setLoggedin(true);
     };
@@ -20,7 +21,7 @@ function App() {
     <Router>
       <Routes>
         <Route exact path='/' element={<Home loggedin={loggedin} logIn={logIn} logOut={logOut}/>} />
-        <Route exact path='/login' element={<Login login={loggedin} setLoggedin={setLoggedin}/>} />
+        <Route exact path='/login' element={<Login login={logIn}/>} />
         <Route exact path='/signup' element={<Signup login={logIn}/>} />
         <Route exact path='/profile' element={<Protected isLoggedIn={loggedin}><Authorised/></Protected>} />
       </Routes>

@@ -7,3 +7,9 @@ export const clientSchema = yup.object().shape({
     password: yup.string().required()
 });
 
+export const loginSchema = yup.object().shape({
+    emailId: yup.string().email().required(),
+    password: yup.string().required()
+});
+
+

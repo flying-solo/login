@@ -3,13 +3,81 @@ import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { loginSchema } from "./validation/clientValidate";
+import {useNavigate} from "react-router-dom";
+import axios from "axios";
+import { ToastContainer, toast} from "react-toastify";
 
 function Login(props) {
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
-  const handleSubmit = (e)=>{
+  const [load, setLoad] = useState(false);
+  const navigate = useNavigate();
+
+  const error = (message) => {
+    toast.error(message, {
+      position: "bottom-center",
+      autoClose: 3000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+    });
+  };
+
+  const success = (message) => {
+    toast.success(message, {
+      position: "bottom-center",
+      autoClose: 2000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: false,
+      draggable: true,
+      progress: undefined,
+      theme: "colored"
+      });
+  }
+
+  const loginURL = process.env.REACT_APP_LOGINURL;
+
+
+  const handleSubmit = async (e)=>{
     e.preventDefault();
-    console.log(password,email);
+    let loginData = {
+      emailId: email,
+      password: password,
+    };
+
+    const isLoginValid = await loginSchema.isValid(loginData);
+    console.log(isLoginValid);
+
+    if (isLoginValid) {
+      console.log(isLoginValid);
+      axios
+        .post(loginURL, loginData)
+        .then((res) => {
+          console.log(res);
+          localStorage.setItem('token', res.data.token);
+          success(res.data.message);
+          setLoad(false);
+          props.login();
+          setTimeout(()=>{
+            navigate("/");
+          },4000);
+        })
+        .catch((err) => {
+          // console.log(err.response.data.message);
+          console.log(err);
+          error(err.response.data.message);
+          setLoad(false);
+        });
+    } else {
+      error("Enter Valid Credentials");
+      console.log("error");
+      setLoad(false);
+    }
   }
 
   return (
@@ -48,15 +116,24 @@ function Login(props) {
             setPassword(e.target.value);
           }}
         />
-        <Button
+        {load ? (<Button
           variant="contained"
           onClick={(e) => {
-            props.setLoggedin(true);
             handleSubmit(e);
+            setLoad(true);
+          }}
+        >
+          Loading....
+        </Button>) : (<Button
+          variant="contained"
+          onClick={(e) => {
+            handleSubmit(e);
+            setLoad(true);
           }}
         >
           Login
-        </Button>
+        </Button>)}
+        <ToastContainer />
         <p>
           Don't have an account? <Link to="/signup">Signup</Link>
         </p>
