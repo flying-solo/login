@@ -7,6 +7,7 @@ import { loginSchema } from "./validation/clientValidate";
 import {useNavigate} from "react-router-dom";
 import axios from "axios";
 import { ToastContainer, toast} from "react-toastify";
+import endpoints from "./constants/Constants";
 
 function Login(props) {
   const [password, setPassword] = useState("");
@@ -40,7 +41,7 @@ function Login(props) {
       });
   }
 
-  const loginURL = process.env.REACT_APP_LOGINURL;
+  const loginURL = process.env.REACT_APP_URL+endpoints.login;
 
 
   const handleSubmit = async (e)=>{

@@ -8,6 +8,7 @@ import {useNavigate} from "react-router-dom";
 import axios from "axios";
 import { ToastContainer, toast} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import endpoints from "./constants/Constants";
 
 function Signup() {
   const [name, setName] = useState("");
@@ -42,7 +43,7 @@ function Signup() {
       });
   }
 
-  const signupURL = process.env.REACT_APP_SIGNUPURL;
+  const signupURL = process.env.REACT_APP_URL+endpoints.signup;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
