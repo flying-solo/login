@@ -3,7 +3,6 @@ import './App.css';
 import Home from './Home';
 import Login from './Login';
 import Signup from './Signup';
-import { useState } from "react";
 import Authorised from './Authorised';
 import Protected from './Protected';
 
